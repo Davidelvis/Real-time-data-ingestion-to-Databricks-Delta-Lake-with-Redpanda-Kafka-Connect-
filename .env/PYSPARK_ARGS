@@ -1,0 +1,5 @@
+REDPANDA_BROKER_IP=0.0.0.0:9092
+REDPANDA_TOPIC=customer-data
+PYSPARK_ARGS='--packages io.delta:delta-core_2.12:1.0.0,org.apache.spark:spark-sql-kafka-0-10_2.12:3.1.2 pyspark-shell'
+DELTA_LAKE_TABLE_DIR='/tmp/delta/customer-table'
+DELTA_LAKE_CHECKOUT_DIR='/tmp/checkpoint/'
