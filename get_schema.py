@@ -33,3 +33,26 @@ def get_schema(spark):
     # decode the json values
     df_read = spark.read.json(df_json.rdd.map(lambda x: x.value), multiLine=True)
     return df_read.schema.json()
+
+def get_table_df(spark):
+    load_dotenv()
+    broker_ip = os.environ.get('REDPANDA_BROKER_IP')
+    topic = os.environ.get('REDPANDA_TOPIC')
+    schema = get_schema(spark)
+    table_df = ( 
+                spark
+                .readStream
+                .format("kafka")
+                .option("kafka.bootstrap.servers", broker_ip)
+                .option("subscribe", topic)
+                .option("startingOffsets", "earliest")
+                .option("mergeSchema", "true")
+                .option("includeHeaders", "true")
+                .option("failOnDataLoss", "false")
+                .load()
+                .withColumn("value", expr("string(value)"))
+                .filter(col("value").isNotNull())
+                .withColumn('value', from_json(col("value"), schema))
+                .select('value.*')
+    )
+    return table_df

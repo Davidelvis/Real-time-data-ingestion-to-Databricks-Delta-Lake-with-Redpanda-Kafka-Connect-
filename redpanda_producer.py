@@ -30,7 +30,7 @@ def main():
         fake_date = fake.date_this_month(True)
         product_id = fake.pyint(1, 10000)
         categories = fake.word(ext_word_list=types_of_categories)
-        product_name = fake.product_name()
+        product_name = fake.ecommerce_name()
         name = fake.name()
         email_addr = fake.email(name)
         str_date = str(fake_date)
